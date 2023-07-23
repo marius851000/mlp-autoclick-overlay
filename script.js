@@ -23,6 +23,14 @@ const version = 2;
 const min_version_url = "https://raw.githubusercontent.com/marius851000/mlp-autoclick-overlay/main/min_version.txt";
 var placed_pixel = 0;
 
+function gm_fetch(request, res, rej) {
+    request.onload = res;
+    request.onerror = rej;
+    request.onabort = rej;
+    request.ontimeout = rej;
+    GM.xmlHttpRequest(request);
+}
+
 function try_place() {
     if (placing_pixel) {
         return;
@@ -61,11 +69,13 @@ function try_place() {
 
     if (nexttilein == undefined || nexttilein.value == "0") {
         console.log("checking for update...");
-        
-        /*var req = new GM.xmlHttpRequest();
         placing_pixel = true;
-        req.addEventListener("load", (res) => {
-            let min_version = parseInt(req.responseText);
+        
+        gm_fetch({
+            method: "GET",
+            url: min_version_url
+        }, (res) => {
+            let min_version = parseInt(res.responseText);
             if (min_version > version) {
                 var waitTime = 10 * 1000;
                 if (placed_pixel == 0) {
@@ -78,7 +88,7 @@ function try_place() {
                     location.reload();
                 }, waitTime);
                 return;
-            }*/
+            }
             console.log("placing pixel...");
             let placebutton = statuspill.shadowRoot.querySelector("button");
             placebutton.click();
@@ -95,9 +105,11 @@ function try_place() {
                     placing_pixel = false;
                 }, 5000);
             }, 2000);
-        /*});
-        req.open("GET", min_version_url);
-        req.send();*/
+        },
+        (rej) => {
+            console.log("Failed to fetch whether update are available. Doing nothing");
+            placing_pixel = false;
+        });
     }
 }
 
