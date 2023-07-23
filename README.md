@@ -19,6 +19,9 @@ If it doesn’t work after 1 minutes, there is a problem. You should try to look
 
 Note that this script include an auto-reload function: it first check that it is up-to-date enought to be considered safe to reload. If the page reload, it should be considered normal, and operation should restart (unless there is an important issue that hasn’t been already fixed)
 
+### how to disable
+You can use the TamperMonkey interface to disable the "r/place MLP autoclicker" script. Remember to reload the page then (and do the inverse for re-enabling it)
+
 ## for developper/maintainers
 
 The way that auto-refresh is simple:
