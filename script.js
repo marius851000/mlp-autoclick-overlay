@@ -19,6 +19,10 @@
 
 var placing_pixel = false;
 
+const version = 2;
+const min_version_url = "https://raw.githubusercontent.com/marius851000/mlp-autoclick-overlay/main/min_version.txt";
+var placed_pixel = 0;
+
 function try_place() {
     if (placing_pixel) {
         return;
@@ -56,21 +60,45 @@ function try_place() {
     console.log(nexttilein)
 
     if (nexttilein == undefined || nexttilein.value == "0") {
-        console.log("placing pixel...");
-        let placebutton = statuspill.shadowRoot.querySelector("button");
-        placebutton.click();
+        console.log("checking for update...");
+        
+        var req = new XMLHttpRequest();
         placing_pixel = true;
-        setTimeout(() => {
-            let colorpicker = document.getElementsByTagName("garlic-bread-embed")[0].shadowRoot.querySelector("garlic-bread-color-picker");
-            let autopickbutton = colorpicker.shadowRoot.querySelector(".actions").children[2];
-            autopickbutton.click();
+        req.addEventListener("load", (res) => {
+            let min_version = parseInt(req.responseText);
+            if (min_version > version) {
+                var waitTime = 10 * 1000;
+                if (placed_pixel == 0) {
+                    waitTime = 50 * 1000;
+                }
+                console.log("Outdated version of autoclicker detected. Reloading the page in " + waitTime + " milliseconds...");
+
+                setTimeout(() => {
+                    console.log("actually reloading...")
+                    location.reload();
+                }, waitTime);
+                return;
+            }
+            console.log("placing pixel...");
+            let placebutton = statuspill.shadowRoot.querySelector("button");
+            placebutton.click();
+            
             setTimeout(() => {
-                let placebuttonfinal = colorpicker.shadowRoot.querySelector(".actions").children[1];
-                console.log("placebutton");
-                placebuttonfinal.click();
-                placing_pixel = false;
-            }, 5000);
-        }, 2000);
+                let colorpicker = document.getElementsByTagName("garlic-bread-embed")[0].shadowRoot.querySelector("garlic-bread-color-picker");
+                let autopickbutton = colorpicker.shadowRoot.querySelector(".actions").children[2];
+                autopickbutton.click();
+                placed_pixel += 1;
+                setTimeout(() => {
+                    let placebuttonfinal = colorpicker.shadowRoot.querySelector(".actions").children[1];
+                    console.log("placebutton");
+                    placebuttonfinal.click();
+                    placing_pixel = false;
+                }, 5000);
+            }, 2000);
+        });
+        req.open("GET", min_version_url);
+        req.send();
+        
     }
 }
 
