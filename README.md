@@ -11,6 +11,7 @@ Installation instructions:
 usage instruction:
 1. Go to https://www.reddit.com/r/place/?screenmode=fullscreen&cx=274&cy=142&px=2453
 2. Wait a bit. If all goes well, it should automatically place the template, and place pixels when avalaible (might need to wait 30 seconds for it to enter into effect)
+3. Make sure to keep the browser open on the current tab. Maybe it could work if not, but that’s untested. Open a new browser window instead.
 
 It won’t place any pixel if the current progess (as displated in the minimap) is greater or equal to 95%. In that case, you can still manually place pixel.
 
