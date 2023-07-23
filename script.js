@@ -30,18 +30,26 @@ function try_place() {
     if (currentTemplateName != "mlp") {
         console.log("current template is " + currentTemplateName + ", changing...");
         templateNameElement.click();
+        placing_pixel = true;
+        setTimeout(() => {
+            placing_pixel = false;
+        }, 11000); // it might take some times for the template to change
         return;
     }
 
     let progressElement = document.getElementsByTagName("mlpminimap")[0].querySelector("div[data-id='pixelDisplayProgress']");
     let progressText = progressElement.querySelector("span").textContent;
-    console.log(progressText)
-    if (progressText.includes("NaN")) {
+    const progressMatch = progressText.match(/(\d+(?:\.\d+))[\w\d\s\n]+%[\w\d\s\n]+\((\d+)\/(\d+)\)/)
+    if( !progressMatch ) {
+        console.log("could not detect current progress, retrying...");
         return;
     }
-    if (progressText.includes("100") || progressText.includes("99") || progressText.includes("98") || progressText.includes("97") || progressText.includes("96") || progressText.includes("95")) {
+    const currentProgress = parseFloat(progressMatch[1]);
+    if( currentProgress >= 95 ) {
+        console.log("current progress above 95%, retrying...");
         return;
     }
+
     let statuspill = document.getElementsByTagName("garlic-bread-embed")[0].shadowRoot.querySelector("garlic-bread-status-pill");
     console.log(statuspill);
     let nexttilein = statuspill.attributes["next-tile-available-in"];
