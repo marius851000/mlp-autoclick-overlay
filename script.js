@@ -113,4 +113,4 @@ function try_place() {
     }
 }
 
-setInterval(try_place, 5000);
+//setInterval(try_place, 5000);
