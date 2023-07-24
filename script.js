@@ -57,8 +57,8 @@ function try_place() {
         return;
     }
     const currentProgress = parseFloat(progressMatch[1]);
-    if( currentProgress >= 95 ) {
-        console.log("current progress above 95%, retrying...");
+    if( currentProgress >= 99 ) {
+        console.log("current progress above 99%, retrying...");
         return;
     }
 
